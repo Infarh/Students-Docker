@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Students.DAL.Entities.Base;
 
@@ -14,6 +13,6 @@ namespace Students.DAL.Entities
 
         public DateTime Birthday { get; set; }
 
-        public virtual Group Group { get; set; }
+        public virtual StudentsGroup Group { get; set; }
     }
 }
