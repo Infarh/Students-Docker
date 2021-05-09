@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-
+using Newtonsoft.Json;
 using Students.DAL;
 using Students.Interfaces.Repositories;
 
@@ -17,13 +17,15 @@ namespace Students.API
         {
             services.AddDbContext<StudentsDB>(
                 opt => opt
-                   .UseSqlServer(Configuration.GetConnectionString("SqlServer"),
-                o => o.MigrationsAssembly("Students.DAL.SqlServer")))
+                   .UseSqlServer(Configuration.GetConnectionString("SqlServer"), o => o.MigrationsAssembly("Students.DAL.SqlServer"))
+                   .UseLazyLoadingProxies())
                .AddTransient<DbInitializer>()
                .AddScoped(typeof(IRepository<>), typeof(DbRepository<>))
                .AddScoped(typeof(INamedRepository<>), typeof(DbNamedRepository<>));
 
-            services.AddControllers();
+            services
+               .AddControllers()
+               .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Students.API", Version = "v1" });
