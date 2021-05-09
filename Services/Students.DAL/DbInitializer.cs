@@ -27,16 +27,18 @@ namespace Students.DAL
 
             var db = _db.Database;
 
-            if (db.EnsureCreated() && !db.GetPendingMigrations().Any())
-                _Logger.LogInformation("БД создана {0} c", timer.Elapsed.TotalSeconds);
-            else
-            {
-                _Logger.LogInformation("Инициализация БД не требуется {0} c", timer.Elapsed.TotalSeconds);
-                return;
-            }
+            var need_to_initialize = false;
+            //if (db.EnsureCreated())
+            //{
+            //    need_to_initialize = true;
+            //    _Logger.LogInformation("БД создана {0} c", timer.Elapsed.TotalSeconds);
+            //}
+            //else
+            //    _Logger.LogInformation("БД существует {0} c", timer.Elapsed.TotalSeconds);
 
             if (db.GetPendingMigrations().Any())
             {
+                need_to_initialize = true;
                 _Logger.LogInformation("Миграция БД");
                 db.Migrate();
                 _Logger.LogInformation("Миграция БД выполнена за {0} c", timer.Elapsed.TotalSeconds);
@@ -44,11 +46,13 @@ namespace Students.DAL
             else
                 _Logger.LogInformation("Миграция БД не требуется");
 
-            if (_db.Students.Any())
+            if (!need_to_initialize || _db.Students.Any())
             {
                 _Logger.LogInformation("Инициализация БД не требуется. {0} с", timer.Elapsed.TotalSeconds);
                 return;
             }
+            _Logger.LogInformation("Инициализация БД тестовым набором данных... {0} с", timer.Elapsed.TotalSeconds);
+
 
             for (var (i, student_n) = (1, 1); i <= 10; i++)
             {
