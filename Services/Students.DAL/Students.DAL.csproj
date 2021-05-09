@@ -8,4 +8,9 @@
     <ProjectReference Include="..\Students.Interfaces\Students.Interfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.5" />
+  </ItemGroup>
+
 </Project>

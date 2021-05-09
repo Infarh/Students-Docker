@@ -7,11 +7,11 @@ namespace Students.Interfaces.Repositories
 {
     public interface IRepository<T> where T : class, IEntity, new()
     {
-        public struct PageResult
+        public struct Page
         {
             public IEnumerable<T> Items { get; init; }
             public int TotalCount { get; init; }
-            public int Page { get; init; }
+            public int PageNumber { get; init; }
             public int Count { get; init; }
 
             public void Deconstruct(out IEnumerable<T> items, out int total_count) => (items, total_count) = (Items, TotalCount);
@@ -21,7 +21,7 @@ namespace Students.Interfaces.Repositories
 
         Task<int> GetCountAsync(CancellationToken Cancel = default);
 
-        Task<PageResult> GetPageAsync(int Page, int Count, CancellationToken Cancel = default);
+        Task<Page> GetPageAsync(int Page, int Count, CancellationToken Cancel = default);
 
         Task<T> GetByIdAsync(int id, CancellationToken Cancel = default);
 
